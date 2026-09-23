@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Orders - SmartCart</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            margin: 0;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        .order {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .status {
+            color: green;
+            font-weight: bold;
+        }
+
+        .item {
+            padding: 8px 0;
+        }
+
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .empty {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #111827;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/css/responsive.css' %}">
+</head>
+
+<body>
+
+<div class="navbar">
+    <strong>SmartCart</strong>
+
+    <div>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'cart' %}">Cart</a>
+        <a href="{% url 'my_orders' %}">My Orders</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <h1>My Orders</h1>
+
+    {% if orders %}
+
+        {% for order in orders %}
+
+        <div class="order">
+
+            <div class="order-header">
+                <div>
+                    <strong>Order #{{ order.id }}</strong>
+                    <br>
+                    <small>{{ order.created_at|date:"d M Y, h:i A" }}</small>
+                </div>
+
+                <div class="status">
+                    {{ order.status }}
+                </div>
+            </div>
+
+            <h3>Items</h3>
+
+            {% for item in order.items.all %}
+            <div class="item">
+                {{ item.product.name }}
+                Ãƒâ€” {{ item.quantity }}
+                Ã¢â‚¬â€ Ã¢â€šÂ¹{{ item.price }}
+            </div>
+            {% endfor %}
+
+            <a class="btn" href="{% url 'order_detail' order.id %}">View Order Details</a>`r`n`r`n            <div class="total">
+                Total: Ã¢â€šÂ¹{{ order.total_amount }}
+            </div>
+
+            <p>
+                <strong>Delivery Address:</strong><br>
+                {{ order.address }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+            <h2>No orders yet</h2>
+            <p>Your completed orders will appear here.</p>
+
+            <a class="btn" href="{% url 'home' %}">
+                Start Shopping
+            </a>
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

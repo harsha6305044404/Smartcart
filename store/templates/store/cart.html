@@ -1,0 +1,279 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart | SmartCart</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        nav {
+            background: #111827;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        .cart-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .price {
+            margin-top: 8px;
+            color: #555;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quantity a {
+            text-decoration: none;
+            background: #111827;
+            color: white;
+            padding: 7px 12px;
+            border-radius: 6px;
+        }
+
+        .remove {
+            background: #dc2626 !important;
+        }
+
+        .total-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 25px;
+            text-align: right;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .checkout {
+            display: inline-block;
+            margin-top: 15px;
+            background: #16a34a;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+        }
+
+        .continue {
+            display: inline-block;
+            margin-top: 15px;
+            margin-right: 10px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+        }
+
+        .empty {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 700px) {
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .quantity {
+                flex-wrap: wrap;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            nav a {
+                margin-left: 8px;
+            }
+        }
+    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/css/responsive.css' %}">
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">
+        ðŸ›’ SmartCart
+    </div>
+
+    <div>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'cart' %}">Cart</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'my_orders' %}">Orders</a>
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="container">
+
+    <h1>Shopping Cart</h1>
+
+    {% if products %}
+
+        {% for item in products %}
+
+        <div class="cart-item">
+
+            <div>
+                <div class="product-name">
+                    {{ item.product.name }}
+                </div>
+
+                <div class="price">
+                    {{ item.product.price }} Ã— {{ item.quantity }}
+                </div>
+
+                <div class="price">
+                    Item Total: {{ item.item_total }}
+                </div>
+            </div>
+
+            <div class="quantity">
+
+                <a
+                    href="{% url 'decrease_quantity' item.product.id %}"
+                    data-cart-action="decrease"
+                    data-url="{% url 'decrease_quantity' item.product.id %}"
+                >
+                    âˆ’
+                </a>
+
+                <strong>{{ item.quantity }}</strong>
+
+                <a
+                    href="{% url 'increase_quantity' item.product.id %}"
+                    data-cart-action="increase"
+                    data-url="{% url 'increase_quantity' item.product.id %}"
+                >
+                    +
+                </a>
+
+                <a
+                    href="{% url 'remove_from_cart' item.product.id %}"
+                    data-cart-action="remove"
+                    data-url="{% url 'remove_from_cart' item.product.id %}"
+                    class="remove"
+                >
+                    Remove
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+        <div class="total-box">
+
+            <h2>
+                Grand Total: {{ total }}
+            </h2>
+
+            <a
+                href="{% url 'home' %}"
+                class="continue"
+            >
+                Continue Shopping
+            </a>
+
+            <a
+                href="{% url 'checkout' %}"
+                class="checkout"
+            >
+                Proceed to Checkout
+            </a>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty">
+
+            <h2>Your cart is empty</h2>
+
+            <p>Add some products to your cart to continue.</p>
+
+            <a
+                href="{% url 'home' %}"
+                class="continue"
+            >
+                Start Shopping
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+<script src="{% static 'store/js/cart.js' %}"></script>
+
+</body>
+</html>

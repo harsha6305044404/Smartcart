@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payment Successful | SmartCart</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 80px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .success {
+            font-size: 60px;
+        }
+
+        h1 {
+            color: #16a34a;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 22px;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/css/responsive.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="success">âœ“</div>
+
+        <h1>Payment Successful!</h1>
+
+        <p>
+            Order #{{ order.id }} has been marked as paid.
+        </p>
+
+        <p>
+            Amount: <strong>{{ order.total_amount }}</strong>
+        </p>
+
+        <a
+            href="{% url 'order_detail' order.id %}"
+            class="button"
+        >
+            View Order
+        </a>
+
+        <a
+            href="{% url 'home' %}"
+            class="button"
+        >
+            Continue Shopping
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

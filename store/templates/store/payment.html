@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payment | SmartCart</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 60px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .amount {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 25px 0;
+        }
+
+        .demo {
+            padding: 15px;
+            background: #fef3c7;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        button {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            background: #16a34a;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/css/responsive.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>ðŸ’³ SmartCart Payment</h1>
+
+        <p>Order #{{ order.id }}</p>
+
+        <div class="amount">
+            {{ order.total_amount }}
+        </div>
+
+        <div class="demo">
+            <strong>Demo Payment</strong><br>
+            This is a simulated payment for the project.
+            No real money or payment details are processed.
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <button type="submit">
+                Confirm Demo Payment
+            </button>
+        </form>
+
+        <a
+            href="{% url 'order_detail' order.id %}"
+            class="back"
+        >
+            Back to Order
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

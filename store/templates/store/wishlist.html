@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wishlist - SmartCart</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 7px;
+            text-decoration: none;
+            margin-top: 8px;
+        }
+
+        .cart {
+            background: #111827;
+            color: white;
+        }
+
+        .remove {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .empty {
+            background: white;
+            padding: 50px;
+            text-align: center;
+            border-radius: 12px;
+        }
+    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/css/responsive.css' %}">
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <strong>SmartCart</strong>
+
+    <div>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'cart' %}">Cart</a>
+        <a href="{% url 'my_orders' %}">My Orders</a>
+        <a href="{% url 'wishlist' %}">Wishlist</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+
+</div>
+
+<div class="container">
+
+    <h1>My Wishlist â¤ï¸</h1>
+
+    {% if items %}
+
+        <div class="products">
+
+            {% for item in items %}
+
+            <div class="card">
+
+                <h2>{{ item.product.name }}</h2>
+
+                <p>
+                    {{ item.product.description|truncatewords:20 }}
+                </p>
+
+                <div class="price">
+                    {{ item.product.price }}
+                </div>
+
+                {% if item.product.stock > 0 %}
+
+                    <a
+                        href="{% url 'add_to_cart' item.product.id %}"
+                        class="button cart"
+                    >
+                        Add to Cart
+                    </a>
+
+                {% endif %}
+
+                <a
+                    href="{% url 'remove_from_wishlist' item.product.id %}"
+                    class="button remove"
+                >
+                    Remove
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty">
+
+            <h2>Your wishlist is empty</h2>
+
+            <p>Add products you want to save for later.</p>
+
+            <a
+                href="{% url 'home' %}"
+                class="button cart"
+            >
+                Browse Products
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
