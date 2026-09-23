@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: smartcart
+    runtime: python
+    buildCommand: "pip install -r requirements.txt && bash build.sh"
+    startCommand: "gunicorn config.wsgi:application --bind 0.0.0.0:\"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.production_settings
+      - key: DJANGO_SECRET_KEY
+        sync: false
